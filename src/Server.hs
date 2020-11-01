@@ -24,8 +24,8 @@ data BoardState = SDraw | SWinner | SContinue deriving (Show, Eq)
 
 isEnd :: Board -> BoardState
 isEnd (Board size board)
-  | isDraw = SDraw
   | isVertical board || isHorizontal size || isDiagonal = SWinner
+  | isDraw = SDraw
   | otherwise = SContinue
   where
   isVertical [] = False
@@ -39,7 +39,7 @@ isEnd (Board size board)
 
   isDiagonal =
     all (\n -> (board !! n) !! n == X) [0..(size - 1)] || all (\n -> (board !! n) !! n == O) [0..(size - 1)] ||
-    all (\n -> (board !! n) !! n == X) [0..(size - 1)] || all (\n -> (board !! n) !! (size - n - 1) == O) [0..(size - 1)]
+    all (\n -> (board !! n) !! (size - n -1) == X) [0..(size - 1)] || all (\n -> (board !! n) !! (size - n - 1) == O) [0..(size - 1)]
     
   isDraw = not $ any (elem Empty) board
 

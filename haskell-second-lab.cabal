@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e1b0da3329f7939f57ade578070695d9bd75f5ee938703bf29b6a894c981bbcc
+-- hash: b2e4df43e7617db83b5b4a329a1cf4b5625fa58213b74c05bca02f9f8cd7bd94
 
 name:           haskell-second-lab
 version:        0.1.0.0
@@ -27,7 +27,8 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Client
+      Common
       Server
       UserAPI
   other-modules:
@@ -39,12 +40,16 @@ library
     , array ==0.5.4.0
     , atomic-primops
     , base >=4.7 && <5
+    , brick
     , ctrie
     , hashable
     , hspec ==2.7.4
     , http-api-data
+    , http-client
     , mtl ==2.2.2
+    , servant-client
     , servant-server
+    , vty
     , wai
     , warp
   default-language: Haskell2010
@@ -61,13 +66,17 @@ executable haskell-second-lab-exe
     , array ==0.5.4.0
     , atomic-primops
     , base >=4.7 && <5
+    , brick
     , ctrie
     , hashable
     , haskell-second-lab
     , hspec ==2.7.4
     , http-api-data
+    , http-client
     , mtl ==2.2.2
+    , servant-client
     , servant-server
+    , vty
     , wai
     , warp
   default-language: Haskell2010
@@ -85,13 +94,17 @@ test-suite haskell-second-lab-test
     , array ==0.5.4.0
     , atomic-primops
     , base >=4.7 && <5
+    , brick
     , ctrie
     , hashable
     , haskell-second-lab
     , hspec ==2.7.4
     , http-api-data
+    , http-client
     , mtl ==2.2.2
+    , servant-client
     , servant-server
+    , vty
     , wai
     , warp
   default-language: Haskell2010

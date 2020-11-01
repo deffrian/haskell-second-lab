@@ -26,12 +26,16 @@ dependencies:
 - hspec == 2.7.4
 - aeson
 - servant-server
+- servant-client
+- http-client
 - wai
 - warp
 - http-api-data
 - hashable
 - ctrie
 - atomic-primops
+- brick
+- vty
 
 
 library:

@@ -14,7 +14,7 @@ import Web.HttpApiData
 
 data CellState = O | X | Empty deriving (Eq, Show, Generic)
 
-data Board = Board { boardSize :: Int, curState :: [[CellState]]}
+data Board = Board { boardSize :: Int, curState :: [[CellState]]} deriving Show
 
 data Move = Move
   { x :: Int
