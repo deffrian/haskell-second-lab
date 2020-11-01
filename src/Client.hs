@@ -16,36 +16,55 @@ move :: Int -> Move -> ClientM MoveResult
 
 newGame :<|> move = client userAPI
 
+-- | client environment
 clientEnv :: IO ClientEnv
 clientEnv = do
   m <- newManager defaultManagerSettings
   return $ mkClientEnv m (BaseUrl Http "localhost" 2282 "")
 
-data GameResult = Continue | WinRes | LossRes | DrawRes deriving (Eq, Show)
+-- | type that represents result of game
+data GameResult
+  = Continue -- ^ game in progress
+  | WinRes   -- ^ user win
+  | LossRes  -- ^ server win
+  | DrawRes  -- ^ draw
+  deriving (Eq, Show)
 
-data StateType = StateType { stBoard :: Board, stPos :: Move, stResult :: GameResult } deriving Show
+-- | type that represent current UI state
+data StateType = StateType
+  { stBoard :: Board       -- ^ game board
+  , stPos :: Move          -- ^ cursor position
+  , stResult :: GameResult -- ^ game result
+  } deriving Show
 
+-- | attribute of selected cell
 selected :: AttrName
 selected = attrName "selected"
 
+-- | all attributes
 gameAttrMap :: AttrMap
 gameAttrMap =
   attrMap
     defAttr
     [(selected, fg red)]
 
+-- | move cursor to the left
 moveLeft :: StateType -> StateType
 moveLeft (StateType board (Move x y) res) = StateType board (Move x (max 0 (y - 1))) res
 
+-- | move cursor to the right
 moveRight :: StateType -> StateType
 moveRight (StateType board@(Board n _) (Move x y) res) = StateType board (Move x (min n (y + 1))) res
 
+-- | move cursor up
 moveUp :: StateType -> StateType
 moveUp (StateType board (Move x y) res) = StateType board (Move (max 0 (x - 1)) y) res
 
+-- | move cursor down
 moveDown :: StateType -> StateType
 moveDown (StateType board@(Board n _) (Move x y) res) = StateType board (Move (min n (x + 1)) y) res
 
+-- | mark cell if it Empty
 makeMove :: CellState -> Board -> Move -> (Bool, Board)
 makeMove val (Board size board) syn@(Move x y) = do
   let (changed, board') = helper x board
@@ -65,9 +84,11 @@ makeMove val (Board size board) syn@(Move x y) = do
     let (changed, res) = helper2 (m - 1) es
     (changed, e : res)
 
+-- | is draw or someone win
 isGameEnded :: StateType -> Bool
 isGameEnded st = stResult st /= Continue
 
+-- | handle keyboard events
 handleEvent :: Int -> StateType -> BrickEvent String () -> EventM String (Next StateType)
 handleEvent gameId syn@(StateType board mv Continue) (VtyEvent (EvKey KEnter [])) = do
   let (changed, board') = makeMove X board mv
@@ -103,9 +124,11 @@ handleEvent _ st (VtyEvent (EvKey KLeft []))
   | otherwise      = continue $ moveLeft st
 handleEvent _ st _ = continue st
 
+-- | client TUI application
 app :: Int -> App StateType () String
 app gameId = App ui neverShowCursor (handleEvent gameId) return (const gameAttrMap)
 
+-- | draw game board
 drawGrid :: StateType -> Widget String
 drawGrid (StateType (Board size board) (Move x y) Continue) = vBox $ grid 1 board
   where
@@ -124,6 +147,6 @@ drawGrid (StateType _ _ DrawRes) = center (str "Draw")
 drawGrid (StateType _ _ LossRes) = center (str "Loss")
 drawGrid (StateType _ _ WinRes) = center (str "Win")
 
-
+-- | TUI
 ui :: StateType -> [Widget String]
 ui st = [center $ drawGrid st]

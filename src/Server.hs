@@ -18,10 +18,20 @@ instance Hashable CellState where
   hash X = 2
   hash Empty = 3
 
-data ServerState = ServerState { allGames :: Map Int Board, gamesCnt :: AtomicCounter }
+-- | type that represents server state
+data ServerState = ServerState
+  { allGames :: Map Int Board  -- ^ all active boards
+  , gamesCnt :: AtomicCounter  -- ^ number of all boards
+  }
 
-data BoardState = SDraw | SWinner | SContinue deriving (Show, Eq)
+-- | type that represents state of game board
+data BoardState
+  = SDraw     -- | draw
+  | SWinner   -- | someone win
+  | SContinue -- | no winner has been determined
+  deriving (Show, Eq)
 
+-- | returns board state
 isEnd :: Board -> BoardState
 isEnd (Board size board)
   | isVertical board || isHorizontal size || isDiagonal = SWinner
@@ -40,12 +50,14 @@ isEnd (Board size board)
   isDiagonal =
     all (\n -> (board !! n) !! n == X) [0..(size - 1)] || all (\n -> (board !! n) !! n == O) [0..(size - 1)] ||
     all (\n -> (board !! n) !! (size - n -1) == X) [0..(size - 1)] || all (\n -> (board !! n) !! (size - n - 1) == O) [0..(size - 1)]
-    
+
   isDraw = not $ any (elem Empty) board
 
+-- | make empty board
 makeBoard :: Int -> Board
 makeBoard n = Board n (replicate n (replicate n Empty))
 
+-- | make client move
 makeHumanMove :: Move -> Board -> Handler Board
 makeHumanMove (Move x y) (Board size board)
   | x > size || x < 1 ||
@@ -69,6 +81,7 @@ makeHumanMove (Move x y) (Board size board)
       es' <- helper2 (n - 1) es
       return $ e : es'
 
+-- | process client move and calculate next step
 makeMove :: Board -> Move -> Handler (MoveResult, Board)
 makeMove syn@(Board size board) mv = do
   syn'@(Board _ board') <- makeHumanMove mv syn
@@ -99,6 +112,7 @@ makeMove syn@(Board size board) mv = do
       let (res, es') = replaceAndGetPos (n + 1) es
       (res, e : es')
 
+-- | process /move request
 moveHandler :: ServerState -> Int -> Move -> Handler MoveResult
 moveHandler st gameId mv = do
   game <- liftIO $ CM.lookup gameId (allGames st)
@@ -114,6 +128,7 @@ moveHandler st gameId mv = do
       _ <- liftIO $ CM.insert gameId newBoard (allGames st)
       return compMv
 
+-- | process /new_game request
 newGameHandler :: ServerState -> Maybe Int -> Handler Int
 newGameHandler st size = do
   realSize <- case size of
@@ -123,8 +138,10 @@ newGameHandler st size = do
   liftIO $ CM.insert gameId (makeBoard realSize) (allGames st)
   return gameId
 
+-- | server
 server :: ServerState -> Server UserAPI
 server st = newGameHandler st :<|> moveHandler st
 
+-- | server app
 app :: ServerState -> Application
 app st = serve userAPI (server st)
