@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b2e4df43e7617db83b5b4a329a1cf4b5625fa58213b74c05bca02f9f8cd7bd94
+-- hash: 60d923160cad4f4fb1389eae44e668058650d9231a0d23fcdf33e45ba5746aba
 
 name:           haskell-second-lab
 version:        0.1.0.0
@@ -28,7 +28,6 @@ source-repository head
 library
   exposed-modules:
       Client
-      Common
       Server
       UserAPI
   other-modules:
@@ -85,6 +84,7 @@ test-suite haskell-second-lab-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      ServerSpec
       Paths_haskell_second_lab
   hs-source-dirs:
       test
