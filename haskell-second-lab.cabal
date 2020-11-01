@@ -4,15 +4,15 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f8475ced517c9f115e673343d586d34bf0cb2522a18469a4ddbfc5b3dc42f44f
+-- hash: e1b0da3329f7939f57ade578070695d9bd75f5ee938703bf29b6a894c981bbcc
 
 name:           haskell-second-lab
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/haskell-second-lab#readme>
-homepage:       https://github.com/githubuser/haskell-second-lab#readme
-bug-reports:    https://github.com/githubuser/haskell-second-lab/issues
-author:         Author name here
-maintainer:     example@example.com
+description:    Please see the README on GitHub at <https://github.com/deffrian/haskell-second-lab#readme>
+homepage:       https://github.com/deffrian/haskell-first-lab#readme
+bug-reports:    https://github.com/deffrian/haskell-first-lab/issues
+author:         Mescheryakov Nikita
+maintainer:     hunter181999@gmail.com
 copyright:      2020 Author name here
 license:        BSD3
 license-file:   LICENSE
@@ -23,17 +23,30 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/haskell-second-lab
+  location: https://github.com/deffrian/haskell-first-lab
 
 library
   exposed-modules:
       Lib
+      Server
+      UserAPI
   other-modules:
       Paths_haskell_second_lab
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , array ==0.5.4.0
+    , atomic-primops
+    , base >=4.7 && <5
+    , ctrie
+    , hashable
+    , hspec ==2.7.4
+    , http-api-data
+    , mtl ==2.2.2
+    , servant-server
+    , wai
+    , warp
   default-language: Haskell2010
 
 executable haskell-second-lab-exe
@@ -44,8 +57,19 @@ executable haskell-second-lab-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , array ==0.5.4.0
+    , atomic-primops
+    , base >=4.7 && <5
+    , ctrie
+    , hashable
     , haskell-second-lab
+    , hspec ==2.7.4
+    , http-api-data
+    , mtl ==2.2.2
+    , servant-server
+    , wai
+    , warp
   default-language: Haskell2010
 
 test-suite haskell-second-lab-test
@@ -57,6 +81,17 @@ test-suite haskell-second-lab-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , array ==0.5.4.0
+    , atomic-primops
+    , base >=4.7 && <5
+    , ctrie
+    , hashable
     , haskell-second-lab
+    , hspec ==2.7.4
+    , http-api-data
+    , mtl ==2.2.2
+    , servant-server
+    , wai
+    , warp
   default-language: Haskell2010

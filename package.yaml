@@ -1,9 +1,9 @@
 name:                haskell-second-lab
 version:             0.1.0.0
-github:              "githubuser/haskell-second-lab"
+github:              "deffrian/haskell-first-lab"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
+author:              "Mescheryakov Nikita"
+maintainer:          "hunter181999@gmail.com"
 copyright:           "2020 Author name here"
 
 extra-source-files:
@@ -17,10 +17,22 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/haskell-second-lab#readme>
+description:         Please see the README on GitHub at <https://github.com/deffrian/haskell-second-lab#readme>
 
 dependencies:
 - base >= 4.7 && < 5
+- array == 0.5.4.0
+- mtl == 2.2.2
+- hspec == 2.7.4
+- aeson
+- servant-server
+- wai
+- warp
+- http-api-data
+- hashable
+- ctrie
+- atomic-primops
+
 
 library:
   source-dirs: src
