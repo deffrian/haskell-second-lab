@@ -15,6 +15,11 @@ import Data.Hashable
 import System.Environment
 
 -- | Entry point
+-- | client UI:
+-- |    q - quit
+-- |    Enter - mark empty cell with 'X'
+-- |    Up / Down / Left / Right - move cursor to select cell
+-- | server runs on 2282 port
 main :: IO ()
 main = do
   args <- getArgs
